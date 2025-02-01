@@ -1,8 +1,6 @@
 package com.lyc.lease.web.admin.controller.apartment;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.model.entity.PaymentType;
@@ -30,9 +28,7 @@ public class PaymentTypeController {
     @Operation(summary = "查询全部支付方式列表")
     @GetMapping("list")
     public Result<List<PaymentType>> listPaymentType() {
-        LambdaQueryWrapper<PaymentType> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(PaymentType::getIsDeleted,0);
-        List<PaymentType> paymentTypes = paymentTypeService.list(lambdaQueryWrapper);
+        List<PaymentType> paymentTypes = paymentTypeService.list();
         return Result.ok(paymentTypes);
     }
 
