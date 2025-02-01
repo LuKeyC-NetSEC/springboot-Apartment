@@ -1,7 +1,6 @@
 package com.lyc.lease.web.admin.controller.apartment;
 
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.model.entity.PaymentType;
 import com.lyc.lease.web.admin.service.PaymentTypeService;
