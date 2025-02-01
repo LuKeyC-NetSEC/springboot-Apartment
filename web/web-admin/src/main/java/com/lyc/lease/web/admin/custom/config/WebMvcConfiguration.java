@@ -1,6 +1,6 @@
 package com.lyc.lease.web.admin.custom.config;
 
-import com.lyc.lease.web.admin.custom.converter.StringToItemTypeConverter;
+import com.lyc.lease.web.admin.custom.converter.StringToBaseEnumConverterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -16,8 +16,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
+//    @Autowired
+//    StringToItemTypeConverter stringToItemTypeConverter;
+
     @Autowired
-    StringToItemTypeConverter stringToItemTypeConverter;
+    StringToBaseEnumConverterFactory stringToBaseEnumConverterFactory;
 
     /**
      * 添加自定义类型转换器
@@ -26,6 +29,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(stringToItemTypeConverter);
+//        registry.addConverter(stringToItemTypeConverter);
+        registry.addConverterFactory(stringToBaseEnumConverterFactory);
     }
 }
