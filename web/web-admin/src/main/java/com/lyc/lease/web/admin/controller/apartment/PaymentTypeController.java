@@ -42,7 +42,7 @@ public class PaymentTypeController {
     @PostMapping("saveOrUpdate")
     public Result saveOrUpdatePaymentType(@RequestBody PaymentType paymentType) {
         LambdaUpdateWrapper<PaymentType> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(PaymentType::getName,paymentType.getName());
+        updateWrapper.eq(PaymentType::getId,paymentType.getId());
         paymentTypeService.saveOrUpdate(paymentType,updateWrapper);
         return Result.ok();
     }
