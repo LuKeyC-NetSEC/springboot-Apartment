@@ -4,4 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lyc.lease.web.admin.mapper.FeeKeyMapper">
 
+    <resultMap id="FeeKeyVoMP" type="com.lyc.lease.web.admin.vo.fee.FeeKeyVo">
+        <id column="id" property="id"/>
+        <result column="key_name" property="name"/>
+        <collection property="feeValueList" ofType="com.lyc.lease.model.entity.FeeValue">
+            <id column="value_id" property="id"/>
+            <result column="value_name" property="name"/>
+            <result column="value_unit" property="unit"/>
+            <result column="key_id" property="feeKeyId"/>
+        </collection>
+    </resultMap>
+
+    <select id="feeInfoList" resultMap="FeeKeyVoMP">
+        select k.id,
+               k.name       key_name,
+               v.id         value_id,
+               v.name       value_name,
+               v.unit       value_unit,
+               v.fee_key_id key_id
+        from fee_key k
+                 left join lease.fee_value v on k.id = v.fee_key_id and v.is_deleted = 0
+        where k.is_deleted = 0
+    </select>
 </mapper>
