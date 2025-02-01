@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @ClassName MybatisPlusConfiguration
- * @Description TODO
+ * @Description TODO MP配置类
  * @Author LuKey_C
  * @Date 2025/1/31 10:47
  * @Version 1.0
