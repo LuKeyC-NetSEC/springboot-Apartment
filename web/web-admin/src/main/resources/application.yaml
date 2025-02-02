@@ -26,4 +26,4 @@ minio:
   endpoint: http://192.168.70.128:9000
   access-key: minioadmin
   secret-key: minioadmin
-  bucket-name: <bucket-name>
+  bucket-name: lease
