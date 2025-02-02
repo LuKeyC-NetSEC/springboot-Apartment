@@ -32,8 +32,8 @@ public class FileServiceImpl implements FileService {
      * @return 文件链接
      */
     @Override
-    public String upload(MultipartFile file) {
-        try {
+    public String upload(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
             String bucketName = properties.getBucketName();
 
             boolean bucketExists = minioClient.bucketExists(
@@ -64,10 +64,6 @@ public class FileServiceImpl implements FileService {
                     .contentType(file.getContentType())
                     .build());
             return String.join("/",properties.getEndpoint(),bucketName,filename);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     /**
