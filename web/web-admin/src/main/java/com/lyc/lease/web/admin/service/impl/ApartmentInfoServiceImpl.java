@@ -1,11 +1,15 @@
 package com.lyc.lease.web.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyc.lease.model.entity.*;
 import com.lyc.lease.model.enums.ItemType;
 import com.lyc.lease.web.admin.mapper.ApartmentInfoMapper;
 import com.lyc.lease.web.admin.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lyc.lease.web.admin.vo.apartment.ApartmentItemVo;
+import com.lyc.lease.web.admin.vo.apartment.ApartmentQueryVo;
 import com.lyc.lease.web.admin.vo.apartment.ApartmentSubmitVo;
 import com.lyc.lease.web.admin.vo.graph.GraphVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +40,8 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
     @Autowired
     ApartmentFeeValueService apartmentFeeValueService;
 
-
+    @Autowired
+    ApartmentInfoMapper apartmentInfoMapper;
     /**
      * 保存或更新公寓信息
      * <p>
@@ -120,6 +125,19 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
             }
             apartmentFeeValueService.saveBatch(apartmentFeeValueList);
         }
+    }
+
+
+    /**
+     * 根据条件分页查询公寓列表
+     *
+     * @param page     分页对象，包含当前页码和每页记录数
+     * @param queryVo  查询条件对象
+     * @return 包含分页信息的公寓列表
+     */
+    @Override
+    public IPage<ApartmentItemVo> pageItem(Page<ApartmentItemVo> page, ApartmentQueryVo queryVo) {
+        return apartmentInfoMapper.pageItem(page,queryVo);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.lyc.lease.web.admin.controller.apartment;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.model.entity.ApartmentInfo;
 import com.lyc.lease.model.enums.ReleaseStatus;
@@ -24,7 +25,15 @@ public class ApartmentController {
 
     @Autowired
     ApartmentInfoService apartmentInfoService;
-
+    /**
+     * 保存或更新公寓信息
+     * <p/>
+     * 根据前端传递的公寓提交信息（ApartmentSubmitVo），调用公寓信息服务（ApartmentInfoService）中的保存或更新方法，
+     * 更新或新增公寓信息。操作成功后，返回一个成功的Result对象。
+     *
+     * @param apartmentSubmitVo 公寓提交信息对象，包含公寓的详细信息
+     * @return Result 包含操作结果的Result对象，操作成功则返回状态码为200的Result对象
+     */
     @Operation(summary = "保存或更新公寓信息")
     @PostMapping("saveOrUpdate")
     public Result saveOrUpdate(@RequestBody ApartmentSubmitVo apartmentSubmitVo) {
@@ -32,10 +41,20 @@ public class ApartmentController {
         return Result.ok();
     }
 
+    /**
+     * 根据条件分页查询公寓列表
+     *
+     * @param current 当前页码
+     * @param size    每页显示的记录数
+     * @param queryVo 查询条件对象
+     * @return 包含分页信息的公寓列表
+     */
     @Operation(summary = "根据条件分页查询公寓列表")
     @GetMapping("pageItem")
     public Result<IPage<ApartmentItemVo>> pageItem(@RequestParam long current, @RequestParam long size, ApartmentQueryVo queryVo) {
-        return Result.ok();
+        Page<ApartmentItemVo> page = new Page<>(current,size);
+        IPage<ApartmentItemVo> result = apartmentInfoService.pageItem(page,queryVo);
+        return Result.ok(result);
     }
 
     @Operation(summary = "根据ID获取公寓详细信息")
