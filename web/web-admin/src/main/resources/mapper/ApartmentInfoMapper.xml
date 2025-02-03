@@ -66,4 +66,17 @@
               group by apartment_id) cc
              on ai.id = cc.apartment_id
     </select>
+    <select id="selectListByApartmentId" resultType="com.lyc.lease.model.entity.LabelInfo">
+
+
+        select id, type, name
+        from label_info
+        where is_deleted = 0
+          and id in (select label_id
+                     from apartment_label
+                     where is_deleted = 0
+                       and apartment_id = #{id})
+
+
+    </select>
 </mapper>

@@ -1,12 +1,15 @@
 package com.lyc.lease.web.admin.mapper;
 
 import com.lyc.lease.model.entity.ApartmentInfo;
+import com.lyc.lease.model.entity.LabelInfo;
 import com.lyc.lease.model.enums.LeaseStatus;
 import com.lyc.lease.web.admin.vo.apartment.ApartmentItemVo;
 import com.lyc.lease.web.admin.vo.apartment.ApartmentQueryVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.List;
 
 /**
 * @author liubo
@@ -17,6 +20,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface ApartmentInfoMapper extends BaseMapper<ApartmentInfo> {
 
     IPage<ApartmentItemVo> pageItem(Page<ApartmentItemVo> page, ApartmentQueryVo queryVo);
+
+    List<LabelInfo> selectListByApartmentId(Long id);
 }
 
 
