@@ -55,10 +55,17 @@ public class RoomController {
         return Result.ok(result);
     }
 
+    /**
+     * 根据id获取房间详细信息
+     *
+     * @param id 房间ID
+     * @return 包含房间详细信息的Result对象
+     */
     @Operation(summary = "根据id获取房间详细信息")
     @GetMapping("getDetailById")
     public Result<RoomDetailVo> getDetailById(@RequestParam Long id) {
-        return Result.ok();
+        RoomDetailVo roomInfo = roomInfoService.getRoomDetailById(id);
+        return Result.ok(roomInfo);
     }
 
     @Operation(summary = "根据id删除房间信息")
