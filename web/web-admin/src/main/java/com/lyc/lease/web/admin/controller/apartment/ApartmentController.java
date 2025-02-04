@@ -57,6 +57,12 @@ public class ApartmentController {
         return Result.ok(result);
     }
 
+    /**
+     * 根据ID获取公寓详细信息
+     *
+     * @param id 公寓ID
+     * @return 包含公寓详细信息的Result对象
+     */
     @Operation(summary = "根据ID获取公寓详细信息")
     @GetMapping("getDetailById")
     public Result<ApartmentDetailVo> getDetailById(@RequestParam Long id) {
@@ -64,9 +70,16 @@ public class ApartmentController {
         return Result.ok(result);
     }
 
+    /**
+     * 根据id删除公寓信息
+     *
+     * @param id 公寓ID
+     * @return 删除操作的结果
+     */
     @Operation(summary = "根据id删除公寓信息")
     @DeleteMapping("removeById")
     public Result removeById(@RequestParam Long id) {
+        apartmentInfoService.removeApartmentById(id);
         return Result.ok();
     }
 
