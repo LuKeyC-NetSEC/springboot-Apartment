@@ -1,6 +1,8 @@
 package com.lyc.lease.web.admin.controller.apartment;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.model.entity.RoomInfo;
@@ -68,22 +70,50 @@ public class RoomController {
         return Result.ok(roomInfo);
     }
 
+    /**
+     * 根据id删除房间信息
+     *
+     * @param id 房间ID
+     * @return 删除操作的结果，成功返回Result.ok()
+     */
     @Operation(summary = "根据id删除房间信息")
     @DeleteMapping("removeById")
     public Result removeById(@RequestParam Long id) {
+        roomInfoService.removeRoomById(id);
         return Result.ok();
     }
 
+    /**
+     * 根据id修改房间发布状态
+     *
+     * @param id 房间的ID
+     * @param status 房间的发布状态，可以是发布或未发布
+     * @return 修改操作的结果，成功返回Result.ok()
+     */
     @Operation(summary = "根据id修改房间发布状态")
     @PostMapping("updateReleaseStatusById")
     public Result updateReleaseStatusById(Long id, ReleaseStatus status) {
+        LambdaUpdateWrapper<RoomInfo> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(RoomInfo::getId, id);
+        updateWrapper.set(RoomInfo::getIsRelease, status);
+        roomInfoService.update(updateWrapper);
         return Result.ok();
     }
 
+    /**
+     * 根据公寓id查询房间列表
+     *
+     * @param id 公寓的ID
+     * @return 包含查询到的房间列表的Result对象
+     */
     @GetMapping("listBasicByApartmentId")
     @Operation(summary = "根据公寓id查询房间列表")
     public Result<List<RoomInfo>> listBasicByApartmentId(Long id) {
-        return Result.ok();
+        LambdaQueryWrapper<RoomInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(RoomInfo::getApartmentId, id);
+        queryWrapper.eq(RoomInfo::getIsRelease, ReleaseStatus.RELEASED);
+        List<RoomInfo> roomInfoList = roomInfoService.list(queryWrapper);
+        return Result.ok(roomInfoList);
     }
 
 }
