@@ -4,6 +4,7 @@ package com.lyc.lease.web.admin.controller.apartment;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.model.entity.RoomInfo;
 import com.lyc.lease.model.enums.ReleaseStatus;
+import com.lyc.lease.web.admin.service.RoomInfoService;
 import com.lyc.lease.web.admin.vo.room.RoomDetailVo;
 import com.lyc.lease.web.admin.vo.room.RoomItemVo;
 import com.lyc.lease.web.admin.vo.room.RoomQueryVo;
@@ -11,6 +12,7 @@ import com.lyc.lease.web.admin.vo.room.RoomSubmitVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,19 @@ import java.util.List;
 @RequestMapping("/admin/room")
 public class RoomController {
 
+    @Autowired
+    RoomInfoService roomInfoService;
+
+    /**
+     * 保存或更新房间信息
+     *
+     * @param roomSubmitVo 房间信息对象
+     * @return 操作结果
+     */
     @Operation(summary = "保存或更新房间信息")
     @PostMapping("saveOrUpdate")
     public Result saveOrUpdate(@RequestBody RoomSubmitVo roomSubmitVo) {
+        roomInfoService.saveOrUpdateRoom(roomSubmitVo);
         return Result.ok();
     }
 
