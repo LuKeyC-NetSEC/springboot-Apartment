@@ -1,6 +1,7 @@
 package com.lyc.lease.web.admin.controller.apartment;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.model.entity.RoomInfo;
 import com.lyc.lease.model.enums.ReleaseStatus;
@@ -38,10 +39,20 @@ public class RoomController {
         return Result.ok();
     }
 
+    /**
+     * 根据条件分页查询房间列表
+     *
+     * @param current 当前页码
+     * @param size    每页显示的条数
+     * @param queryVo 查询条件对象
+     * @return 包含房间列表的Result对象
+     */
     @Operation(summary = "根据条件分页查询房间列表")
     @GetMapping("pageItem")
     public Result<IPage<RoomItemVo>> pageItem(@RequestParam long current, @RequestParam long size, RoomQueryVo queryVo) {
-        return Result.ok();
+        IPage<RoomItemVo> page = new Page<>(current, size);
+        IPage<RoomItemVo> result = roomInfoService.pageRoomItemByQuery(page, queryVo);
+        return Result.ok(result);
     }
 
     @Operation(summary = "根据id获取房间详细信息")

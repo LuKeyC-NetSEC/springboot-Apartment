@@ -1,12 +1,15 @@
 package com.lyc.lease.web.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lyc.lease.model.entity.*;
 import com.lyc.lease.model.enums.ItemType;
 import com.lyc.lease.web.admin.mapper.RoomInfoMapper;
 import com.lyc.lease.web.admin.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyc.lease.web.admin.vo.graph.GraphVo;
+import com.lyc.lease.web.admin.vo.room.RoomItemVo;
+import com.lyc.lease.web.admin.vo.room.RoomQueryVo;
 import com.lyc.lease.web.admin.vo.room.RoomSubmitVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 
     @Autowired
     RoomLeaseTermService roomLeaseTermService;
+
+    @Autowired
+    RoomInfoMapper roomInfoMapper;
 
     @Override
     public void saveOrUpdateRoom(RoomSubmitVo roomSubmitVo) {
@@ -151,6 +157,11 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
             }
             roomLeaseTermService.saveBatch(roomLeaseTerms);
         }
+    }
+
+    @Override
+    public IPage<RoomItemVo> pageRoomItemByQuery(IPage<RoomItemVo> page, RoomQueryVo queryVo) {
+        return roomInfoMapper.pageRoomItemByQuery(page, queryVo);
     }
 }
 
