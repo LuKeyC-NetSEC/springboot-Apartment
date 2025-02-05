@@ -34,7 +34,8 @@ public class ViewAppointment extends BaseEntity {
 
     @Schema(description = "预约时间")
     @TableField(value = "appointment_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //配置 JackSon序列化时间格式以及时区
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") //配置 JackSon序列化时间格式以及时区
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") //配置 JackSon序列化时间格式
     private Date appointmentTime;
 
     @Schema(description = "备注信息")
