@@ -1,5 +1,6 @@
 package com.lyc.lease.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lyc.lease.model.enums.BaseStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -19,7 +20,7 @@ public class UserInfo extends BaseEntity {
     private String phone;
 
     @Schema(description = "密码")
-    @TableField(value = "password")
+    @TableField(value = "password",select = false) //SQL中禁止查询password
     private String password;
 
     @Schema(description = "头像url")
