@@ -49,6 +49,7 @@ public class LeaseAgreementController {
     @Operation(summary = "根据id删除租约信息")
     @DeleteMapping("removeById")
     public Result removeById(@RequestParam Long id) {
+        leaseAgreementService.removeById(id);
         return Result.ok();
     }
 
