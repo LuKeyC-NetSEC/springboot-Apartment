@@ -24,6 +24,12 @@ public class LeaseAgreementController {
     @Autowired
     LeaseAgreementService leaseAgreementService;
 
+    /**
+     * 保存或修改租约信息
+     *
+     * @param leaseAgreement 租约信息实体
+     * @return 操作结果
+     */
     @Operation(summary = "保存或修改租约信息")
     @PostMapping("saveOrUpdate")
     public Result saveOrUpdate(@RequestBody LeaseAgreement leaseAgreement) {
@@ -31,6 +37,14 @@ public class LeaseAgreementController {
         return Result.ok();
     }
 
+    /**
+     * 根据条件分页查询租约列表
+     *
+     * @param current 当前页码
+     * @param size    每页数量
+     * @param queryVo 查询条件
+     * @return 查询结果
+     */
     @Operation(summary = "根据条件分页查询租约列表")
     @GetMapping("page")
     public Result<IPage<AgreementVo>> page(@RequestParam long current, @RequestParam long size, AgreementQueryVo queryVo) {
@@ -39,6 +53,12 @@ public class LeaseAgreementController {
         return Result.ok(result);
     }
 
+    /**
+     * 根据id查询租约信息
+     *
+     * @param id 租约ID
+     * @return 查询结果
+     */
     @Operation(summary = "根据id查询租约信息")
     @GetMapping(name = "getById")
     public Result<AgreementVo> getById(@RequestParam Long id) {
@@ -46,6 +66,12 @@ public class LeaseAgreementController {
         return Result.ok(result);
     }
 
+    /**
+     * 根据id删除租约信息
+     *
+     * @param id 租约ID
+     * @return 操作结果
+     */
     @Operation(summary = "根据id删除租约信息")
     @DeleteMapping("removeById")
     public Result removeById(@RequestParam Long id) {
@@ -53,6 +79,13 @@ public class LeaseAgreementController {
         return Result.ok();
     }
 
+    /**
+     * 根据id更新租约状态
+     *
+     * @param id     租约ID
+     * @param status 租约状态
+     * @return 操作结果
+     */
     @Operation(summary = "根据id更新租约状态")
     @PostMapping("updateStatusById")
     public Result updateStatusById(@RequestParam Long id, @RequestParam LeaseStatus status) {
