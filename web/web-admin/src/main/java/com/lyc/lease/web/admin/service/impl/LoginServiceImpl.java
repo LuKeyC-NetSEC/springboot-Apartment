@@ -1,5 +1,6 @@
 package com.lyc.lease.web.admin.service.impl;
 
+import com.lyc.lease.common.constant.RedisConstant;
 import com.lyc.lease.web.admin.service.LoginService;
 import com.lyc.lease.web.admin.vo.login.CaptchaVo;
 import com.wf.captcha.SpecCaptcha;
@@ -21,9 +22,9 @@ public class LoginServiceImpl implements LoginService {
         SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 4);
 
         String code = specCaptcha.text().toLowerCase();
-        String key = "admin:login:" + UUID.randomUUID();
+        String key = RedisConstant.ADMIN_LOGIN_PREFIX + UUID.randomUUID();
 
-        redisTemplate.opsForValue().set(key,code,60, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key,code,RedisConstant.ADMIN_LOGIN_CAPTCHA_TTL_SEC, TimeUnit.SECONDS);
         return new CaptchaVo(specCaptcha.toBase64(),key);
     }
 }
