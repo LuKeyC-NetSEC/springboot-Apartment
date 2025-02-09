@@ -92,8 +92,3 @@ guiug-sph-mall-admin
 ├─ tsconfig.json          # typescript 全局配置
 └─ vite.config.ts         # vite 全局配置文件
 ```
-## 文档地址
-
-http://139.198.163.91:8080/doc.html#/home
-http://139.198.127.41:8080/doc.html#/home
-http://139.198.163.91:8081/doc.html#/home
