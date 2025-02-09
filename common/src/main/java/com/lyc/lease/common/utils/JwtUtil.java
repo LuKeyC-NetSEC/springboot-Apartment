@@ -1,7 +1,8 @@
 package com.lyc.lease.common.utils;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.lyc.lease.common.exception.LeaseException;
+import com.lyc.lease.common.result.ResultCodeEnum;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
@@ -22,11 +23,11 @@ public class JwtUtil {
     /**
      * 生成令牌
      *
-     * @param userId 用户ID
+     * @param userId   用户ID
      * @param userName 用户名
      * @return 生成的令牌字符串
      */
-    public static String createToken(Long userId,String userName){
+    public static String createToken(Long userId, String userName) {
         return Jwts.builder().
                 setExpiration(new Date(System.currentTimeMillis() + 3600000)).
                 setSubject("USER_INFO").
@@ -34,5 +35,25 @@ public class JwtUtil {
                 claim("userName", userName).
                 signWith(secretKey, SignatureAlgorithm.HS256).
                 compact();
+    }
+
+    /**
+     * 解析JWT令牌
+     *
+     * @param token 待解析的JWT令牌
+     * @throws LeaseException 如果令牌过期或无效，则抛出异常
+     */
+    public static void parseToken(String token) {
+        if (token == null) {
+            throw new LeaseException(ResultCodeEnum.ADMIN_LOGIN_AUTH);
+        }
+        try {
+            JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
+            jwtParser.parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            throw new LeaseException(ResultCodeEnum.TOKEN_EXPIRED);
+        } catch (JwtException e) {
+            throw new LeaseException(ResultCodeEnum.TOKEN_INVALID);
+        }
     }
 }
