@@ -29,7 +29,7 @@ public class JwtUtil {
      */
     public static String createToken(Long userId, String userName) {
         return Jwts.builder().
-                setExpiration(new Date(System.currentTimeMillis() + 3600000*24*365L)).
+                setExpiration(new Date(System.currentTimeMillis() + 3600000)).
                 setSubject("USER_INFO").
                 claim("userId", userId).
                 claim("userName", userName).
@@ -39,17 +39,22 @@ public class JwtUtil {
 
     /**
      * 解析JWT令牌
+     * <p>
+     * 此方法用于解析传入的JWT令牌，并返回令牌中的Claims对象。
+     * 如果令牌无效或过期，将抛出异常。
      *
      * @param token 待解析的JWT令牌
-     * @throws LeaseException 如果令牌过期或无效，则抛出异常
+     * @return Claims对象，包含令牌中的信息
+     * @throws LeaseException 如果令牌为空、过期或无效，则抛出异常
      */
-    public static void parseToken(String token) {
+    public static Claims parseToken(String token) {
         if (token == null) {
             throw new LeaseException(ResultCodeEnum.ADMIN_LOGIN_AUTH);
         }
         try {
             JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
-            jwtParser.parseClaimsJws(token);
+            Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+            return claimsJws.getBody();
         } catch (ExpiredJwtException e) {
             throw new LeaseException(ResultCodeEnum.TOKEN_EXPIRED);
         } catch (JwtException e) {
