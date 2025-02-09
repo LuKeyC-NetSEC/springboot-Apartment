@@ -29,7 +29,7 @@ public class JwtUtil {
      */
     public static String createToken(Long userId, String userName) {
         return Jwts.builder().
-                setExpiration(new Date(System.currentTimeMillis() + 3600000)).
+                setExpiration(new Date(System.currentTimeMillis() + 3600000*24*365L)).
                 setSubject("USER_INFO").
                 claim("userId", userId).
                 claim("userName", userName).
@@ -55,5 +55,9 @@ public class JwtUtil {
         } catch (JwtException e) {
             throw new LeaseException(ResultCodeEnum.TOKEN_INVALID);
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(createToken(2L, "user"));
     }
 }
