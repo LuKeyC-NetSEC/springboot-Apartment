@@ -76,6 +76,6 @@ public class LoginServiceImpl implements LoginService {
         SystemUserInfoVo systemUserInfoVo = new SystemUserInfoVo();
         systemUserInfoVo.setName(systemUser.getName());
         systemUserInfoVo.setAvatarUrl(systemUser.getAvatarUrl());
-        return null;
+        return systemUserInfoVo;
     }
 }

@@ -1,6 +1,8 @@
 package com.lyc.lease.web.admin.controller.login;
 
 
+import com.lyc.lease.common.login.LoginUser;
+import com.lyc.lease.common.login.LoginUserHolder;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.common.utils.JwtUtil;
 import com.lyc.lease.web.admin.service.LoginService;
@@ -57,8 +59,7 @@ public class LoginController {
     @Operation(summary = "获取登陆用户个人信息")
     @GetMapping("info")
     public Result<SystemUserInfoVo> info(@RequestHeader("access-token") String token) {
-        Claims claims = JwtUtil.parseToken(token);
-        Long userId = claims.get("userId", Long.class);
+        Long userId = LoginUserHolder.getLoginUser().getUserId();
         SystemUserInfoVo result = loginService.getLoginUserInfo(userId);
         return Result.ok(result);
     }
