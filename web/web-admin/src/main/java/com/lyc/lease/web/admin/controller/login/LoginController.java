@@ -31,10 +31,17 @@ public class LoginController {
         return Result.ok(result);
     }
 
+    /**
+     * 登录接口
+     *
+     * @param loginVo 登录信息对象
+     * @return 登录结果，包含JWT令牌
+     */
     @Operation(summary = "登录")
     @PostMapping("login")
     public Result<String> login(@RequestBody LoginVo loginVo) {
-        return Result.ok();
+        String jwt = loginService.login(loginVo);
+        return Result.ok(jwt);
     }
 
     @Operation(summary = "获取登陆用户个人信息")
