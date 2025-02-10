@@ -1,10 +1,12 @@
 package com.lyc.lease.web.app.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.lyc.lease.common.login.LoginUserHolder;
 import com.lyc.lease.model.entity.*;
 import com.lyc.lease.model.enums.ItemType;
 import com.lyc.lease.web.app.mapper.*;
 import com.lyc.lease.web.app.service.ApartmentInfoService;
+import com.lyc.lease.web.app.service.BrowsingHistoryService;
 import com.lyc.lease.web.app.service.RoomInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyc.lease.web.app.vo.apartment.ApartmentItemVo;
@@ -58,6 +60,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
     @Autowired
     ApartmentInfoService apartmentInfoService;
 
+    @Autowired
+    BrowsingHistoryService browsingHistoryService;
+
     @Override
     public IPage<RoomItemVo> pageItem(IPage<RoomItemVo> page, RoomQueryVo queryVo) {
         return roomInfoMapper.pageItem(page,queryVo);
@@ -98,6 +103,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
         roomDetailVo.setPaymentTypeList(paymentTypeList);
         roomDetailVo.setFeeValueVoList(feeValueVoList);
         roomDetailVo.setLeaseTermList(leaseTermList);
+
+        //异步 保存浏览历史
+        browsingHistoryService.saveHistory(LoginUserHolder.getLoginUser().getUserId(),id);
 
         return roomDetailVo;
     }
