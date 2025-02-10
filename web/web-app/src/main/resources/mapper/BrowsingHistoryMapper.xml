@@ -5,6 +5,7 @@
 <mapper namespace="com.lyc.lease.web.app.mapper.BrowsingHistoryMapper">
     <resultMap id="HistoryItemVoMP" type="com.lyc.lease.web.app.vo.history.HistoryItemVo" autoMapping="true">
         <id column="id" property="id"/>
+        <result column="room_id" property="roomId"/>
         <collection property="roomGraphVoList" ofType="com.lyc.lease.web.app.vo.graph.GraphVo" autoMapping="true"
                     select="selectGraphVoByRoomId" column="room_id"
         />
