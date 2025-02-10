@@ -1,11 +1,16 @@
 package com.lyc.lease.web.app.service.impl;
-
+import com.lyc.lease.common.utils.JwtUtil;
+import com.lyc.lease.model.enums.BaseStatus;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lyc.lease.common.constant.RedisConstant;
 import com.lyc.lease.common.exception.LeaseException;
 import com.lyc.lease.common.result.ResultCodeEnum;
 import com.lyc.lease.common.utils.CodeUtil;
+import com.lyc.lease.model.entity.UserInfo;
+import com.lyc.lease.web.app.mapper.UserInfoMapper;
 import com.lyc.lease.web.app.service.LoginService;
 import com.lyc.lease.web.app.service.SmsService;
+import com.lyc.lease.web.app.vo.user.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -20,6 +25,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     StringRedisTemplate redisTemplate;
+
+    @Autowired
+    UserInfoMapper userInfoMapper;
 
     /**
      * 获取手机验证码
@@ -42,5 +50,49 @@ public class LoginServiceImpl implements LoginService {
 
         smsService.sendCode(phone,code);
         redisTemplate.opsForValue().set(key,code,RedisConstant.ADMIN_LOGIN_CAPTCHA_TTL_SEC, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 用户登录
+     *
+     * @param loginVo 登录信息对象，包含验证码和手机号
+     * @return 登录成功后返回的JWT令牌
+     * @throws LeaseException 抛出各种登录异常情况，如验证码为空、手机号为空、验证码错误、账号被禁用等
+     */
+    @Override
+    public String login(LoginVo loginVo) {
+
+        if (loginVo.getCode()==null){
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_EMPTY);
+        }
+        if (loginVo.getPhone()==null){
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_PHONE_EMPTY);
+        }
+        String key = RedisConstant.APP_LOGIN_PREFIX+loginVo.getPhone();
+        String code = redisTemplate.opsForValue().get(key);
+        if (code == null){
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_EXPIRED);
+        }
+        if (!code.equals(loginVo.getCode())){
+            throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_ERROR);
+        }
+
+        LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserInfo::getPhone,loginVo.getPhone());
+
+        UserInfo userInfo = userInfoMapper.selectOne(queryWrapper);
+        if (userInfo == null){
+            userInfo = new UserInfo();
+            userInfo.setPhone(loginVo.getPhone());
+            userInfo.setNickname("用户-"+loginVo.getPhone().substring(7));
+            userInfo.setStatus(BaseStatus.ENABLE);
+            userInfoMapper.insert(userInfo);
+        }else {
+            if (userInfo.getStatus() == BaseStatus.DISABLE){
+                throw new LeaseException(ResultCodeEnum.APP_ACCOUNT_DISABLED_ERROR);
+            }
+        }
+
+        return JwtUtil.createToken(userInfo.getId(), userInfo.getPhone());
     }
 }

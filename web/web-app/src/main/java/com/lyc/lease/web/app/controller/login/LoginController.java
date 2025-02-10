@@ -18,6 +18,12 @@ public class LoginController {
     @Autowired
     LoginService loginService;
 
+    /**
+     * 获取短信验证码
+     *
+     * @param phone 用户手机号
+     * @return 操作结果
+     */
     @GetMapping("login/getCode")
     @Operation(summary = "获取短信验证码")
     public Result getCode(@RequestParam String phone) {
@@ -25,10 +31,17 @@ public class LoginController {
         return Result.ok();
     }
 
+    /**
+     * 登录接口
+     *
+     * @param loginVo 登录信息对象，包含用户名和密码等登录信息
+     * @return 登录成功后返回的包含JWT令牌的Result对象
+     */
     @PostMapping("login")
     @Operation(summary = "登录")
     public Result<String> login(@RequestBody LoginVo loginVo) {
-        return Result.ok();
+        String token = loginService.login(loginVo);
+        return Result.ok(token);
     }
 
     @GetMapping("info")
