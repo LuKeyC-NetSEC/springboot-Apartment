@@ -1,6 +1,7 @@
 package com.lyc.lease.web.app.controller.login;
 
 
+import com.lyc.lease.common.login.LoginUserHolder;
 import com.lyc.lease.common.result.Result;
 import com.lyc.lease.web.app.service.LoginService;
 import com.lyc.lease.web.app.vo.user.LoginVo;
@@ -44,10 +45,17 @@ public class LoginController {
         return Result.ok(token);
     }
 
+    /**
+     * 获取登录用户信息
+     *
+     * @return 包含用户信息的Result对象
+     */
     @GetMapping("info")
     @Operation(summary = "获取登录用户信息")
     public Result<UserInfoVo> info() {
-        return Result.ok();
+        Long userId = LoginUserHolder.getLoginUser().getUserId();
+        UserInfoVo result = loginService.getLogInUserById(userId);
+        return Result.ok(result);
     }
 }
 

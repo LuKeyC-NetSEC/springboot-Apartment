@@ -11,6 +11,7 @@ import com.lyc.lease.web.app.mapper.UserInfoMapper;
 import com.lyc.lease.web.app.service.LoginService;
 import com.lyc.lease.web.app.service.SmsService;
 import com.lyc.lease.web.app.vo.user.LoginVo;
+import com.lyc.lease.web.app.vo.user.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -94,5 +95,18 @@ public class LoginServiceImpl implements LoginService {
         }
 
         return JwtUtil.createToken(userInfo.getId(), userInfo.getPhone());
+    }
+
+    /**
+     * 根据用户ID获取登录用户信息
+     *
+     * @param userId 用户ID
+     * @return 登录用户信息对象
+     */
+    @Override
+    public UserInfoVo getLogInUserById(Long userId) {
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        UserInfoVo userInfoVo = new UserInfoVo(userInfo.getNickname(),userInfo.getAvatarUrl());
+        return userInfoVo;
     }
 }
