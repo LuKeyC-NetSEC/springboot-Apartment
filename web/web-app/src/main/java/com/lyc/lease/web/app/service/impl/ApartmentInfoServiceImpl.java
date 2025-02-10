@@ -57,7 +57,7 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
         apartmentItemVo.setGraphVoList(graphVoList);
         apartmentItemVo.setLabelInfoList(labelInfoList);
         apartmentItemVo.setMinRent(minRent);
-        return null;
+        return apartmentItemVo;
     }
 
     @Override
