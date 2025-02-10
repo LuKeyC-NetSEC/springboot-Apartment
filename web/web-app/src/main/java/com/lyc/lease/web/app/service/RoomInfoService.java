@@ -3,6 +3,7 @@ package com.lyc.lease.web.app.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lyc.lease.model.entity.RoomInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lyc.lease.web.app.vo.room.RoomDetailVo;
 import com.lyc.lease.web.app.vo.room.RoomItemVo;
 import com.lyc.lease.web.app.vo.room.RoomQueryVo;
 
@@ -13,4 +14,8 @@ import com.lyc.lease.web.app.vo.room.RoomQueryVo;
 */
 public interface RoomInfoService extends IService<RoomInfo> {
     IPage<RoomItemVo> pageItem(IPage<RoomItemVo> page, RoomQueryVo queryVo);
+
+    RoomDetailVo getDetailById(Long id);
+
+    IPage<RoomItemVo> pageItemByApartmentId(IPage<RoomItemVo> page, Long id);
 }

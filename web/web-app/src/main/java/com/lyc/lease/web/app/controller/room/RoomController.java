@@ -40,15 +40,32 @@ public class RoomController {
         return Result.ok(result);
     }
 
+    /**
+     * 根据ID获取房间的详细信息
+     *
+     * @param id 房间ID
+     * @return 包含房间详细信息的Result对象
+     */
     @Operation(summary = "根据id获取房间的详细信息")
     @GetMapping("getDetailById")
     public Result<RoomDetailVo> getDetailById(@RequestParam Long id) {
-        return Result.ok();
+        RoomDetailVo result = roomInfoService.getDetailById(id);
+        return Result.ok(result);
     }
 
+    /**
+     * 根据公寓ID分页查询房间列表
+     *
+     * @param current 当前页码
+     * @param size    每页显示条数
+     * @param id      公寓ID
+     * @return 包含分页结果和房间列表的Result对象
+     */
     @Operation(summary = "根据公寓id分页查询房间列表")
     @GetMapping("pageItemByApartmentId")
     public Result<IPage<RoomItemVo>> pageItemByApartmentId(@RequestParam long current, @RequestParam long size, @RequestParam Long id) {
-        return Result.ok();
+        IPage<RoomItemVo> page = new Page<>();
+        IPage<RoomItemVo> result = roomInfoService.pageItemByApartmentId(page,id);
+        return Result.ok(result);
     }
 }
