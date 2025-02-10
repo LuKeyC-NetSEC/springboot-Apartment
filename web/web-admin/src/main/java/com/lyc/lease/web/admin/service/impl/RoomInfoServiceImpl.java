@@ -2,6 +2,7 @@ package com.lyc.lease.web.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.lyc.lease.common.constant.RedisConstant;
 import com.lyc.lease.model.entity.*;
 import com.lyc.lease.model.enums.ItemType;
 import com.lyc.lease.web.admin.mapper.*;
@@ -15,6 +16,7 @@ import com.lyc.lease.web.admin.vo.room.RoomQueryVo;
 import com.lyc.lease.web.admin.vo.room.RoomSubmitVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
@@ -70,6 +72,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
     @Autowired
     LeaseTermMapper leaseTermMapper;
 
+    @Autowired
+    RedisTemplate<String,Object> redisTemplate;
+
     @Override
     public void saveOrUpdateRoom(RoomSubmitVo roomSubmitVo) {
         boolean isUpdate = roomSubmitVo.getId() != null;
@@ -108,6 +113,10 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
             LambdaQueryWrapper<RoomLeaseTerm> termQueryWrapper = new LambdaQueryWrapper<>();
             termQueryWrapper.eq(RoomLeaseTerm::getRoomId, roomSubmitVo.getId());
             roomLeaseTermService.remove(termQueryWrapper);
+
+            //删除缓存
+            String key = RedisConstant.APP_ROOM_PREFIX+roomSubmitVo.getId();
+            redisTemplate.delete(key);
         }
 
         //1.保存新的graphInfoList
@@ -262,6 +271,10 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
         LambdaQueryWrapper<RoomLeaseTerm> termQueryWrapper = new LambdaQueryWrapper<>();
         termQueryWrapper.eq(RoomLeaseTerm::getRoomId, id);
         roomLeaseTermService.remove(termQueryWrapper);
+
+        //删除缓存
+        String key = RedisConstant.APP_ROOM_PREFIX + id;
+        redisTemplate.delete(key);
     }
 }
 
